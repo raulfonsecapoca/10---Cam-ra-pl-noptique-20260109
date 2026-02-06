@@ -1,28 +1,28 @@
-%% RAW -> LF using a specific white set (MOD_0061), no database
+%% RAW -> LF
 clear; close all; clc;
 
+% --- May change from 0001 to 0006 ---
 ImgName = 'IMG_0005';
 
-% --- Your capture ---
 rawFile  = ['Dataset test\LFToolbox0.5_Samples\Images\F01\' ImgName '__frame.raw'];
 metaFile = ['Dataset test\LFToolbox0.5_Samples\Images\F01\' ImgName '__frame_metadata.json'];
 
 
 
-% --- White set you have ---
+% --- White image for calibration (weight) ---
 whiteGridFile = 'Dataset test\LFToolbox0.5_Samples\Cameras\A000424242\WhiteImages\data.C.3__C__T1CALIB__MOD_0061.grid.json';
 whiteRawFile  = 'Dataset test\LFToolbox0.5_Samples\Cameras\A000424242\WhiteImages\data.C.3__C__T1CALIB__MOD_0061.RAW';
 whiteMetaFile = 'Dataset test\LFToolbox0.5_Samples\Cameras\A000424242\WhiteImages\data.C.3__C__T1CALIB__MOD_0061.TXT';
 
-% ---- Read LF metadata (your capture) ----
+% ---- Read LF metadata ----
 metaLF = LFReadMetadata(metaFile);
 
-% ---- Read lenslet RAW (your capture) ----
+% ---- Read lenslet RAW ----
 W = metaLF.image.width;
 H = metaLF.image.height;
 LensletImage = LFReadRaw(rawFile, '12bit', [W H]);
 
-% ---- Read white metadata (TXT: nested structure) ----
+% ---- Read white image metadata ----
 metaWhiteWhole = LFReadMetadata(whiteMetaFile);
 FA = metaWhiteWhole.master.picture.frameArray;
 if iscell(FA)
@@ -41,7 +41,7 @@ WhiteImage = LFReadRaw(whiteRawFile, '12bit', [Ww Hw]);
 gridData = LFReadMetadata(whiteGridFile);
 LensletGridModel = gridData.LensletGridModel;
 
-% ---- DecodeOptions (mirror what LFLytroDecodeImage sets for F01) ----
+% ---- DecodeOptions ----
 DecodeOptions = struct();
 DecodeOptions.DemosaicOrder = 'bggr';
 
@@ -68,7 +68,7 @@ LF(:,:,:,:,4) = LFWeight;
 if exist('LFDispTiles','file')
     LFDispTiles(LF);
 else
-    % fallback: show central subaperture (common quick sanity check)
+    % fallback: show central subaperture (sanity check)
     % (indexing order is [j,i,l,k,chan] in Dansereau's docs)
     midJ = round(size(LF,1)/2);
     midI = round(size(LF,2)/2);

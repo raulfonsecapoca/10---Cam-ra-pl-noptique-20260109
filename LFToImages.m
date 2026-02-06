@@ -1,6 +1,5 @@
 %% LF visualization + refocus sweep + all-in-focus fusion (RGB + Weight)
 % Assumes LF is 5-D: [j, i, l, k, c], with c=1..3 RGB, c=4 Weight
-% Works with LF produced by LFDecodeLensletImageDirect + LF(:,:,:,:,4)=LFWeight
 
 clear; close all; clc;
 
@@ -59,7 +58,7 @@ LF = double(LF);
 sz = size(LF);
 fprintf("LF size: %s\n", mat2str(sz));
 
-% Expect [U V Y X C] but Dansereau naming is [j i l k c]
+% Expect [U V Y X C] but Dansereau (toolbox) naming is [j i l k c]
 U = sz(1); V = sz(2); Y = sz(3); X = sz(4); C = sz(5);
 
 if C < 4
@@ -73,24 +72,6 @@ LF_W   = LF(:,:,:,:,4);
 % Normalize for display only
 [LFdisp_RGB, LFdisp_W] = normalizeForDisplay(LF_RGB, LF_W, pLow, pHigh);
 
-%% 
-J1 = im2gray(squeeze(LF_RGB(1, 2, :, :, 1)));
-J2 = im2gray(squeeze(LF_RGB(7, 7, :, :, 1)));
-
-% The disparity is better visualize using imshowpair
-figure()
-imshowpair(J1, J2)
-%imshow(stereoAnaglyph(Im1, Im2)); 
-title('Superposition de deux images')
-
-disparityRange = [0 16];
-disparityMap = disparityBM(J1,J2,'DisparityRange',disparityRange,'UniquenessThreshold',20);
-
-figure()
-imshow(disparityMap,disparityRange)
-title('Disparity Map')
-colormap jet
-colorbar
 
 %% ---------------- 2) MOSAIC 9x9 FOR EACH CHANNEL ----------------
 %if showMosaicChannels
@@ -188,7 +169,7 @@ if doAllInFocus && ~isempty(refocusStack)
 
     focusScore = zeros(Y, X, nAlpha);
 
-    % Laplacian filter (simple)
+    % Laplacian filter
     hLap = [0 1 0; 1 -4 1; 0 1 0];
 
     for aIdx = 1:nAlpha
