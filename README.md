@@ -9,30 +9,6 @@ This project contains two MATLAB scripts for processing **Lytro Light Field imag
 
 ---
 
-## Project structure (suggested)
-
-project/
-├─ Dataset test/
-│ └─ LFToolbox0.5_Samples/
-│ ├─ Images/
-│ │ └─ F01/
-│ │ ├─ IMG_0006__frame.raw
-│ │ └─ IMG_0006__frame_metadata.json
-│ └─ Cameras/
-│ └─ A000424242/
-│ └─ WhiteImages/
-│ ├─ data.C.3__C__T1CALIB__MOD_0061.grid.json
-│ ├─ data.C.3__C__T1CALIB__MOD_0061.RAW
-│ └─ data.C.3__C__T1CALIB__MOD_0061.TXT
-├─ Output/
-│ └─ (generated .mat files)
-├─ raw_to_lf_MOD_0061.m
-└─ lf_visualize_refocus_allinfocus.m
-
-
-Paths can be adjusted freely, as long as the scripts are updated accordingly.
-
----
 
 ## Installation Instructions
 
