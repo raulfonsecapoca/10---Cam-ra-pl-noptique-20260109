@@ -5,7 +5,7 @@
 clear; close all; clc;
 
 %% ---------------- USER SETTINGS ----------------
-ImgName = 'IMG_0002';
+ImgName = 'IMG_0005';
 matFile = ['Output\LF_from_' ImgName '.mat'];
 lfVarName = '';                     % leave empty to auto-detect 5D numeric var
 

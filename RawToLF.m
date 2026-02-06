@@ -1,7 +1,7 @@
 %% RAW -> LF using a specific white set (MOD_0061), no database
 clear; close all; clc;
 
-ImgName = 'IMG_0003';
+ImgName = 'IMG_0006';
 
 % --- Your capture ---
 rawFile  = ['Dataset test\LFToolbox0.5_Samples\Images\F01\' ImgName '__frame.raw'];
