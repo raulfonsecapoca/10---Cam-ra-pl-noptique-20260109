@@ -69,7 +69,6 @@ if exist('LFDispTiles','file')
     LFDispTiles(LF);
 else
     % fallback: show central subaperture (sanity check)
-    % (indexing order is [j,i,l,k,chan] in Dansereau's docs)
     midJ = round(size(LF,1)/2);
     midI = round(size(LF,2)/2);
     RGBc = squeeze(LF(midJ, midI, :, :, 1:3));
@@ -79,3 +78,25 @@ end
 
 outputPath = ['Output\LF_from_' ImgName '.mat'];
 save(outputPath, 'LF', 'DecodeOptionsOut', 'LensletGridModel', '-v7.3');
+
+
+
+
+LensletImage = LFReadRaw(rawFile, '12bit', [W H]);
+
+%% ---- Show RAW as-is (but color) ----
+% Quick Bayer demosaic for visualization only.
+raw12 = uint16(LensletImage);
+
+% Normalize to 16-bit range for display
+raw16 = uint16(double(raw12) * (65535 / double(max(raw12(:)))));
+
+% Demosaic
+bayerPattern = upper(DecodeOptions.DemosaicOrder);   % e.g., 'BGGR'
+rawRGB = demosaic(raw16, bayerPattern);
+
+figure;
+imshow(rawRGB, []);
+title(['RAW (demosaic only) - ' ImgName]);
+
+

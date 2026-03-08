@@ -144,7 +144,7 @@ if doRefocus
             end
         end
 
-        % Normalize by weight sum (avoid divide-by-zero)
+        % Normalize by weight sum
         accW = max(accW, 1e-12);
         refocused = accRGB ./ accW;
 
@@ -180,7 +180,7 @@ if doAllInFocus && ~isempty(refocusStack)
 
         L = abs(imfilter(Ylum, hLap, 'replicate'));
 
-        % Optional: smooth focus score locally for stability
+        % Smooth focus score locally for stability
         if focusWin > 1
             L = imboxfilt(L, focusWin);
         end
@@ -191,8 +191,6 @@ if doAllInFocus && ~isempty(refocusStack)
     % Winner alpha index per pixel
     [~, bestIdx] = max(focusScore, [], 3);   % [Y X], values in 1..nAlpha
 
-    % Optional: stabilize bestIdx (reduces salt-and-pepper switching)
-    % (median filter keeps discrete indices)
     bestIdx = medfilt2(bestIdx, [3 3], 'symmetric');
 
     % Build all-in-focus RGB by selecting refocusStack at bestIdx per pixel
@@ -207,13 +205,13 @@ if doAllInFocus && ~isempty(refocusStack)
         allInFocusHard(:,:,c) = reshape(tmp(sub2ind([Y*X, nAlpha], linPix, bestLin)), Y, X);
     end
 
-    % Display (normalized for viewing)
+    % Display
     allInFocusDisp = normalizeRGBForDisplay(allInFocusHard, pLow, pHigh);
     figure('Name','All-in-focus (HARD argmax) fusion');
     imshow(allInFocusDisp);
     title('All-in-focus (HARD): per-pixel best alpha');
 
-    % Show which alpha wins (map and also in physical alpha values)
+    % Show which alpha wins
     %figure('Name','Best alpha index map (HARD)');
     %imagesc(bestIdx); axis image off; colormap parula; colorbar;
     %title('Best alpha index per pixel');
@@ -224,6 +222,9 @@ if doAllInFocus && ~isempty(refocusStack)
 end
 
 disp("Done.");
+
+
+
 
 %% ===================== Helper functions =====================
 
