@@ -1,5 +1,10 @@
 # Light Field Pipeline (Lytro) — RAW to LF + Visualization / Refocus / All-in-Focus
 
+## Authors
+
+- Raul Fonseca Poça
+- Juan Diego Zuñiga Vargas
+
 This project contains two MATLAB scripts for processing Lytro Light Field data:
 
 1. **RAW to LF**: decodes a lenslet `.raw` image into a 5-D Light Field (LF).
